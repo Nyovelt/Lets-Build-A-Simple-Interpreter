@@ -25,6 +25,18 @@ In calc1.py, we will make a calculator, such that,
 
 
 
+该程序的运作是这样的
+
+对于 a + b (a,b are Integers), 通过 `词法分析` 获得了
+
+```
+(value = a, type = Integer)
+(value = "+", type = PLUS)
+(value = b, type = Integer)
+```
+
+这样计算就很方便了
+
 ## Source
 
 https://ruslanspivak.com/lsbasi-part1/
