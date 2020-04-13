@@ -79,6 +79,66 @@ class Interpreter(object):
                         self.pos += 1
                         return token
 
+                # 当上面的程序都绕过后抛出错误
                 self.error()
 
-                
+        def eat(self, token_type):
+                # compare the current token type with the passed token
+                # type and if they match then "eat" the current token
+                # and assign the next token to the self.current_token,
+                # otherwise raise an exception.  
+                # 
+                # 将现在的token和传递的token进行比较
+                # 如果类型一样：
+                #       继续执行一步（或者叫做吃掉一个字符）    
+                # 否则：
+                #       抛出异常
+                if self.current_token.type == token_type:
+                        self.current_token = self.get_next_token()
+                else:
+                        self.error()
+
+        def expr(self):
+                """ expr -> 整数加整数 INTEGER PLUS INTEGER"""
+                # 这是第一次执行时， 将 current token 作用于第一位输入的字符
+                # set current token to the first token taken from the input              
+                self.current_token = self.get_next_token()
+
+                # we expect the current token to be a single-digit integer
+                # 当 current token 是左边的整数
+                left = self.current_token
+                self.eat(INTEGER)
+
+                # we expect the current token to be a '+' token
+                # 当 current token 是运算符(operator)
+                op = self.current_token
+                self.eat(PLUS)
+
+                # we expect the current token to be a single-digit integer
+                # 当 current token 是右边的整数
+                right = self.current_token
+                self.eat(INTEGER)               
+                # after the above call the self.current_token is set to
+                # EOF token
+
+                # 此时 整数 "+"  整数已经获得了输入
+                # 著需要运算并返回
+                result = left.value + right.value
+                return result
+
+def main():
+        while True:
+                try:
+                        # To run under Python3 replace 'raw_input' call
+                        # with 'input'
+                        text = input('calc> ') 
+                except EOFError:
+                        break
+                if not text:
+                        continue
+                interpreter = Interpreter(text)
+                result = interpreter.expr()
+                print(result)
+
+if __name__ == '__main__':
+        main()
